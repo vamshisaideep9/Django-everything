@@ -8,48 +8,30 @@ from django.contrib.auth.models import (
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
+        """
+        Create and return a regular user with an email and password.
+        """
         if not email:
-            raise ValueError("Users must have an email address.")
-        if not password:
-            raise ValueError("Users must add a password.")
-        
-        user = self.model(
-            email=self.normalize_email(email),
-            **extra_fields
-        )
-
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
-    
-    def create_staffuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        user = self.create_user(
-            email,
-            password=password,
-            **extra_fields
-        )
-        return user
-    
-    def create_superuser(self, email, password, **extra_fields):
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """
+        Create and return a superuser with an email and password.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_admin', True)
 
-        if extra_fields.get('is_admin') is not True:
-            raise ValueError('Superuser must have is_admin = True')
-        
-        user = self.create_user(
-            email,
-            password=password,
-            **extra_fields
-        )
-
-        return user
-
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField(unique=True)
+    username = models.CharField(blank=True, unique=True, max_length=50)
+    email = models.EmailField(unique=True, blank=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -69,3 +51,12 @@ class User(AbstractBaseUser):
     
     def has_module_perms(self, app_label):
         return True
+
+
+class UserToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    access_token = models.CharField(max_length=512)
+    refresh_token = models.CharField(max_length=512)
+
+    def __str__(self):
+        return f"Tokens for {self.user.username}"
