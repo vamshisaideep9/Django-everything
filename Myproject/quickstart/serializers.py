@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from quickstart.models import UserToken
 
 User = get_user_model()
 
@@ -25,3 +26,11 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['name']
+
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = UserToken
+        fields = ['user', 'access_token', 'refresh_token']

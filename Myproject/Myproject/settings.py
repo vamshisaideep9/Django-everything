@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework",
     "quickstart",
-    "snippets"
+    "snippets",
+    "products",
 ]
 
 
@@ -51,6 +52,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASS': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+
+    'DEFAULT_FILTER_BACKENDS' : [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ]
 }
 
 
@@ -59,7 +64,7 @@ AUTH_USER_MODEL = "quickstart.User"
 from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME' : timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME' : timedelta(days=30),
 }
 
 
