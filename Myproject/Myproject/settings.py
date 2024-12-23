@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "quickstart",
     "snippets",
     "products",
+    "blog",
 ]
 
 INSTALLED_APPS += [
