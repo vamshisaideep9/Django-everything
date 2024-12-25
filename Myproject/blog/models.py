@@ -187,5 +187,36 @@ entries = Entry.objects.all()
 for entry in entries:
     print([author.name for author in entry.authors.all()])
 
+
+----------------------------------------------------------------------
+
+Django Q objects:
+
+1. Basic usage of Q objects.
+- Q objects allow you to create more complex query conditions using &, | and ~ (Not)
+
+Example1 OR condition:
+
+a) Find entries with a headline containing "Django" OR rating less than 5
+from django.db.models import Q
+entries = Entry.objects.filter(Q(headline__icontains="Django")|Q(rating__lt=5))
+
+b) AND conditions
+entries = Entry.objects.filter(Q(pub_date__year=2024) & Q(rating__gt=7))
+
+c) NOT conditions
+entries = Entry.objects.filter(~Q(headline__icontains="Python"))
+
+
+2. Combining Q objects with Keyword arguments
+
+a) combining Q and filter
+entries = Entry.objects.filter(Q(headline__icontains="Tips") | Q(rating__gt=8), blog=blog1)
+
+b) Exclude with combined filters
+entries = Entry.objects.filter(blog=blog2).exclude(Q(number_of_comments__gt=10))
+
+
+*** still more to go, we will see later.
 """
 
