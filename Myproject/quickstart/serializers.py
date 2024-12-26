@@ -9,10 +9,23 @@ User = get_user_model()
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'username', 'email', 'password','is_active', 'is_staff', 'is_superuser']
+        extra_kwargs = {'password': {'write_only': True}}
 
+
+    #custom validation for email uniqueness
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return value
+    
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = User(
+            username = validated_data['username'],
+            email = validated_data['email']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
         return user
     
 
