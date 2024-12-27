@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [
-    'debug_toolbar'
+    #'debug_toolbar'
 ]
 
 
@@ -69,17 +69,28 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "quickstart.User"
 
 
+#Memcache
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 
+#Redis Cache
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis server location and database number (1 in this case)
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME' : timedelta(days=30),
 }
 
