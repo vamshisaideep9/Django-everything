@@ -1,0 +1,23 @@
+Restrict acces to the API based on a whitelist of IP address
+
+create a middleware:
+
+from django.http import HttpResponseForbidden
+
+ALLOWED_IPS = ['127.0.0.1', '192.168.1.100']  # Add your IPs here
+
+class IPWhitelistMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        client_ip = request.META.get('REMOTE_ADDR')
+        if client_ip not in ALLOWED_IPS:
+            return HttpResponseForbidden('Forbidden: IP not allowed')
+        return self.get_response(request)
+
+# Add this middleware in settings.py
+MIDDLEWARE = [
+    # Other middlewares
+    'path.to.IPWhitelistMiddleware',
+]

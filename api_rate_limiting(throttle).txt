@@ -1,0 +1,84 @@
+Implementing Throttling in Django
+
+---> Throttling is the same as permissions in the DRF, as it determines whether 
+a particular request should be authorized or discarded. 
+---> It is used to rate-limit the no.of API requests a client can make. 
+Throttling is flexible in DRF, and multiple throttles can be implemented to 
+control requests made by authenticated and anonymus users or to restrict resources based on different parts of the APIs.
+
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_THROTTLE_CLASSES': [
+
+        'rest_framework.throttling.AnonRateThrottle',
+
+        'rest_framework.throttling.UserRateThrottle'
+
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+
+        'anon': '2/min',
+
+        'user': '4/min'
+
+    }
+
+}
+
+
+UserRateThrottle and AnonRateThrottle.
+
+The UserRateThrottle throttles the requests of authenticated users in the app 
+by using the user ID to generate a unique key to throttle against.
+
+While the AnonRateThrottle throttles the requests of unconfirmed 
+or unauthenticated users in the app by using the ip address to 
+generate a unique key to throttle against.
+
+The DEFAULT_THROTTLE_RATES sets the number of requests per period of each type
+of user. The period can be minute, second, hour, or day.
+
+
+Multiple user rate throttle:
+
+We define multiple user rate throttles for users by overriding the default
+throttle class and adding a scope value.
+
+throttles.py
+
+from rest_framework.throttling import UserRateThrottle
+
+class HighRateThrottle(UserRateThrottle):
+
+    scope = 'high'
+
+class LowRateThrottle(UserRateThrottle):
+
+    scope = 'low'
+
+
+scoped rate throttle:
+
+We may want to limit access to some APIs while increasing access to others.
+This is accomplished by setting the default throttle class 
+to ScopedRateThrottle and including a 'throttle scope' properly in our view.
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_THROTTLE_CLASSES': [
+
+        "rest_framework.throttling.ScopedRateThrottle"
+
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+
+        'high': '30/day’,
+
+        'low': '4/day'
+
+    }
+
+}
