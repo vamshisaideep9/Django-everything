@@ -134,7 +134,8 @@ MIDDLEWARE = [
 
 
 MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'Myproject.middlewares.IP_whitelisting.IPwhitelstMiddleware'
 ]
 
 ROOT_URLCONF = "Myproject.urls"
