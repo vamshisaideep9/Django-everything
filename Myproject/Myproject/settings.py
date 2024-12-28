@@ -56,14 +56,41 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 
-    'DEFAULT_AUTHENTICATION_CLASS': (
+    'DEFAULT_AUTHENTICATION_CLASSES': (  
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
-    'DEFAULT_FILTER_BACKENDS' : [
+    'DEFAULT_FILTER_BACKENDS': [  
         'django_filters.rest_framework.DjangoFilterBackend',
-    ]
+    ],
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '2/min',  # 2 requests per minute for anonymous users
+        'user': '4/min',  # 4 requests per minute for authenticated users
+    },
 }
+
+   
+
+
+
+#  'DEFAULT_THROTTLE_CLASSES': [
+#         'rest_framework.throttling.ScopedRateThrottle'
+#     ],
+
+#     'DEFAULT_THROTTLE_RATES': {
+#         'high': '2/hour',
+#         'low': '2/hour',
+#     }
+
+
+
+
 
 
 AUTH_USER_MODEL = "quickstart.User"
