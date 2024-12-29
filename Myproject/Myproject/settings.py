@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,11 +44,9 @@ INSTALLED_APPS = [
     "snippets",
     "products",
     "blog",
+    'drf_yasg'
 ]
 
-INSTALLED_APPS += [
-    #'debug_toolbar'
-]
 
 
 
@@ -70,8 +69,8 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '2/min',  # 2 requests per minute for anonymous users
-        'user': '4/min',  # 4 requests per minute for authenticated users
+        'anon': '1000/min',  # 2 requests per minute for anonymous users
+        'user': '1000/min',  # 4 requests per minute for authenticated users
     },
 }
 
@@ -143,7 +142,9 @@ ROOT_URLCONF = "Myproject.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / 'templates'
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -205,6 +206,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

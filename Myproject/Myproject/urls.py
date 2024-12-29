@@ -21,7 +21,26 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 from quickstart import views
+from django.conf.urls.static import static
+from django.conf import settings
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Django APIs",
+        default_version="v1",
+        description="API documentation for your project.",
+        terms_of_service="https://localhost:8000/terms/",
+        contact=openapi.Contact(email="vamshisaideep@gmail.com"),
+        license=openapi.License(name="BSD Licenses"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 
 
@@ -39,3 +58,22 @@ urlpatterns += [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token-list/', views.TokenList.as_view())
 ]
+
+
+urlpatterns += [
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+] 
+
+
+"""
+1) Get_schema_view: Generates a schema view for your API. It includes metadeta like
+the title, version, and description of your api.
+
+2) with_ui('swagger'): Serves swagger UI documentation.
+
+3) with_ui('redoc): serves Redoc documentation
+
+4) without_ui(): Generates a JSON schema for the API, useful for integrations or customizations.
+"""
