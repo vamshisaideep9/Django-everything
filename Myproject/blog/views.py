@@ -9,10 +9,16 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from django.core.cache import cache
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 # Create your views here.
 
 
 class BlogListCreate(generics.ListCreateAPIView):
+
+    
+
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticated]
@@ -21,6 +27,12 @@ class BlogListCreate(generics.ListCreateAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['name']
     ordering_fields = ['id']
+    
+    @swagger_auto_schema(
+        operation_description="Create and List Blogs",
+        responses={200: openapi.Response('success')},
+        tags=['Blogs'],
+    )
    
 
     @method_decorator(cache_page(60*15)) # cache for 15 minutes
@@ -30,6 +42,8 @@ class BlogListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         cache.clear()
+
+  
 
     
 
