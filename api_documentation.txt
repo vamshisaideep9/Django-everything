@@ -1,0 +1,11 @@
+Api Documentation:
+
+drf-yasg is a package that provides tools to generate and serve swagger and
+Redoc documentation for DRF APIs.
+
+1. Install drf-yasg
+pip install drf-yasg
+
+2. Add drf_yasg to the INSTALLED_APPS in your project
+
+

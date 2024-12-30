@@ -1,0 +1,168 @@
+Microservices
+
+
+Microservices are an application architecture style where independent,
+self-contained programs with a single purpose each can communicate with each other over a network.
+
+Typically, these microservices are able to be deployed independently because they have
+strong separation of responsibilities via a well-defined specification with
+significant backwards compatibility to avoid sudden dependency breakage.
+
+
+
+martinFlower Microservices article: https://martinfowler.com/articles/microservices.html#CharacteristicsOfAMicroserviceArchitecture
+
+1. The microservices architectural style is an approach to developing a single application as a suite of small services, each running in its own process
+and communicating with lightwight mechanisms, often an HTTP resource API. 
+
+2. Monolithic Style: With monolithic architecture, all processes are tightly coupled and run as a single service. This means 
+that if one process of the application experiences a spike in demand, the entire architecture must be scaled. 
+Adding or improving a monolithic applications features becomes more complex as the code base grows.
+
+3. Microservices architecture: An application is built as independent components that run each application process as 
+a service. These services communicate via a well-defined interface using lightwight APIs. Services are built for business capabilities and each service performs a
+single function. because they are independently run, each service can be updated, deployed, and scaled to meet demand for specific function of an application.
+
+
+Characteristics Of A Microservice Architecture:
+
+1) Componentization via services:
+
+--> A component is a unit of software that is independently replaceable and upgradeable.
+--> Microservice architecture will use libraries, but their primary way of componentizing their own software is by
+    breaking down into services. 
+--> We define libraries as components that are linked into a program and called using in-memory function calls.
+--> While services are out-of-process components who communicate with a mechanism such as web service request, or remote procedure call.
+--> One main reason for using services as components is that services are independently deployable.
+--> If you have an application that consists of a multiple libraries in a single process, a change to any single component results in having to 
+    redeploy the entire application. But if that application is decomposed into multiple services, you can expect many single service changes to 
+    only require that service to be redeployed.
+
+2) Organized around business capabilities
+
+--> The microservice approach to division is different, splitting up into services organized around business capability. Such 
+    services take a broad-stack implementation of software for that business area, including user-interface, 
+    persistant storage, and any external collaborations. Consequently the teams are cross-functional, including the full range of skills
+    required for the development: user-experience, database, and project management.
+
+
+
+Microservices, practices and tools  
+
+Microservices are all about having specialized applications. They should be autonomus with only a single
+entrace through the API. They should be decoupled from each others. This decoupling is accomplished through a 
+physical separation. One cannot invoke classes and methods or functions from other services if they are physically
+separated. Finally, They are organized vertically. 
+
+1) Continouous Delivery or Deployment(CD):
+
+--> With microservices comes decreased development cycle resulting is shorter time-to-market. It takes
+less time to develop, test and deploy a microservice than equivalent feature inside a monolithic application.
+
+--> If you want to fully profit from this increase in speed, It is essential that there are no bottlenecks in the process 
+and CD is probably that best path.
+
+
+2) Containers
+
+--> Docker
+
+3) Configuration Management (CM):
+
+--> The real scope of CMs should be making sure that very low level things are working properly.
+
+--> Ansible Tool. Ansible provides open-source automation that reduces complexity and runs everywhere. using
+    Ansible lets you automate virtually any task.
+
+    - Eliminate repitition and simplify workflows
+    - manage and maintain system Configuration
+    - Continuously deploy complex software
+    - perform zero-downtime rolling updates
+
+
+1. Key principles
+
+a) modularity: Each microservice represents a self-contained module with a specific responsibility.
+
+b) Scalability: Microservice can be scaled independently based on demand
+
+c) Decentralized data management: Each microservice has its own database, avoiding a single point of failure.
+
+2. Benifits of microservices
+
+a) Independent Deployment: Each microservice can be developed, deployed, and updated independently without affecting other.
+
+b) Fault isolation: Failures in one service dont cascade others.
+
+c) Better resource utilization: Resources can be allocated based on service demand.
+
+
+
+Migration from Monolithic Architecture to Microservices
+
+The 8-step Migration Process:
+
+1) Identify logical componenets:
+
+a) data objects
+b) data actions
+c) Job to perform and use cases
+
+--> The data objects are logical constructs representing the data being used. The data actions
+    are the commands that are used on one or more data objects, possibly on different types of data, to perform a task.
+    The job to perform represents the function the users are calling to fulfill their organization roles. 
+
+--> When combining multiple systems into a unified system, the data objects, data actions, and jobs to perform for each individual system must be identified. 
+    All these components are implemented as modules within the codebase with one or more modules representing each data object, data action, and job to perform. 
+    These modules should be grouped into categories for working with later steps. 
+
+2) Flatten and Refactor Components:
+
+--> After all the modules have been uniquely identified and grouped. It is time to organize the groups internally.
+    Components that duplicate functionality must be addressed before implmenting the microservice. In the final system, there should be only one
+    microservice that performs any specific fundtion. Function duplication will most likely encountered when there are multiple
+    monolithic applications being merged. 
+
+--> Merging duplicated functions and data will require the same considerations as when designing the ingestion of a new dataset.
+    - Check data formats
+    - verify datatypes
+    - verify data accuracy
+    - identify outliers
+    - Deal with missing fields or values.
+
+3) Identify component dependencies:
+
+--> After the componenets have been identified and reorganized to prepare for the migration, the system
+    architect should identify the dependencies between the components. This activity can be performed using a 
+    static analysis of the source code to search for calls between different libraries and datatypes.
+
+4) Identify component groups:
+
+--> After the dependencies have been identified, the system architect should focus on grouping the components into cohesive groups that
+    can be transformed into microservice, or, at least, macroservices. 
+
+5) Create an API for Remote User interface
+
+--> To maximize the scalability of the final system, the API should be:
+    - stateless
+    - able to handle all data objects represented within the system
+    - backward compatible with pervious versions
+    - versioned
+
+6) Migrating component groups to macroservices
+
+--> The key goal at this step is to move component groups into separate projects and make separate
+    deployments. At a minimun, each macroservice should be independently deployable from within the system's 
+    Continouous integration and Continouous deployment pipeline 
+
+
+7) Migrate Macroservices to microservices
+
+--> The process of pulling the components, data objects, and functions out of the monolithic system and into 
+    macroserives will provide insight into how these components can be further separated into microservices. Each microservice maintains    
+    its own datastore and performs only a small set of actions on the data objects within the datastore.
+
+8) Deployment and Testing   
+
+--> Once a macroservice or microservice is ready for deployment, the next step involves integration testing and deployment.
+    The monolithic system must be configured to use the new service for its data needs rather than its legacy datastore.
